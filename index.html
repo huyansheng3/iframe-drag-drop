@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖拽到iframe演示</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h2>可拖拽项目</h2>
+            <ul id="draggable-list">
+                <li class="draggable-item" draggable="true" data-id="item1">项目1</li>
+                <li class="draggable-item" draggable="true" data-id="item2">项目2</li>
+                <li class="draggable-item" draggable="true" data-id="item3">项目3</li>
+                <li class="draggable-item" draggable="true" data-id="item4">项目4</li>
+                <li class="draggable-item" draggable="true" data-id="item5">项目5</li>
+            </ul>
+        </div>
+        <div class="right-panel">
+            <h2>iframe目标区域</h2>
+            <div class="iframe-container">
+                <iframe id="target-frame" src="iframe.html"></iframe>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
