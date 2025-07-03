@@ -58,7 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // 处理来自iframe的消息
         if (message.type === 'itemDropped') {
             console.log(`Item ${message.id} was dropped in the iframe`);
-            // 可以在这里实现其他功能，如：从主页面列表中移除已拖入的项
+            // 找到并移除主页面中对应的可拖拽项目
+            const droppedItem = document.querySelector(`.draggable-item[data-id="${message.id}"]`);
+            if (droppedItem) {
+                droppedItem.remove();
+            }
         }
     });
 });
