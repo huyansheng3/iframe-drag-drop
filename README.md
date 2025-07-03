@@ -1,50 +1,96 @@
-# iframe拖拽演示
+# iframe 拖拽演示
 
-这是一个演示如何实现从主页面向iframe内部拖拽元素的示例项目。该演示展示了HTML5拖放API与跨窗口通信的结合使用。
+> 在主页面与 `iframe` 间实现元素拖放交互的最小可复现示例
 
-## 演示地址
+## 在线体验
 
-[在线演示](https://huyansheng3.github.io/iframe-drag-drop/)
+- **Demo**：<https://huyansheng3.github.io/iframe-drag-drop/>
 
-## 功能特点
+若无法访问 GitHub Pages，可本地启动静态服务器（见下文"快速开始"）。
 
-- 从主页面拖拽列表项到iframe内部
-- 实时视觉反馈
-- 跨窗口通信
-- 响应式设计
+---
+
+## 功能亮点
+
+1. **双窗口拖放**：支持从父页面拖拽列表项到 `iframe` 内部的拖放区域。
+2. **实时视觉反馈**：拖拽过程中，高亮提示目标区域，增强用户体验。
+3. **简洁通信机制**：基于 `postMessage` 完成跨窗口数据同步，逻辑清晰。
+4. **零依赖**：纯原生 HTML / CSS / JS 实现，方便学习与集成。
+
+---
+
+## 快速开始
+
+以下命令基于 Node.js 环境，如无请先[安装 Node.js](https://nodejs.org/)。
+
+```bash
+# 克隆仓库
+$ git clone https://github.com/huyansheng3/iframe-drag-drop.git
+$ cd iframe-drag-drop
+
+# 安装一个极简静态服务器（任选其一）
+$ npm i -g serve   # 或者 npm i -g http-server
+
+# 启动本地预览（端口可自定）
+$ serve . -l 5173  # 默认会自动打开浏览器
+```
+
+> 直接在浏览器打开 `index.html` 亦可运行，但某些浏览器对本地文件的跨域限制较严格，建议使用静态服务器。
+
+---
 
 ## 项目结构
 
-- `index.html` - 主页面，包含可拖拽的列表项和嵌套的iframe
-- `iframe.html` - iframe内部页面，包含放置区域
-- `styles.css` - 主页面和iframe的样式
-- `main.js` - 主页面的JavaScript，处理拖拽相关逻辑
-- `iframe.js` - iframe内部页面的JavaScript，处理接收拖拽项的逻辑
+```text
+iframe-drag-drop/
+├─ index.html   # 父页面：可拖拽列表 + iframe 容器
+├─ iframe.html  # 子页面：拖放目标区域
+├─ main.js      # 父页面拖拽 & postMessage 逻辑
+├─ iframe.js    # 子页面接收 & 渲染逻辑
+├─ styles.css   # 两页面共用样式
+└─ README.md
+```
 
-## 实现原理
+---
 
-本演示利用以下技术实现拖拽效果：
+## 关键实现
 
-1. **HTML5拖放API**：使用`draggable`属性和拖放相关事件
-2. **窗口间通信**：通过`postMessage` API实现主页面和iframe之间的消息传递
-3. **事件管理**：动态添加和移除事件监听器，确保拖放体验流畅
-4. **数据传输**：使用`dataTransfer`对象在拖拽过程中传递数据
+| 技术点 | 说明 |
+| :----: | :---- |
+| **HTML5 Drag & Drop API** | 通过 `draggable="true"`、`dragstart` / `drop` 等事件实现拖放行为 |
+| **Window.postMessage** | 解决父页面与 `iframe` 间跨域通信，传递拖拽数据 |
+| **事件委托** | 使用事件冒泡降低监听器数量，提高性能 |
+| **CSS 交互效果** | 利用伪类与过渡动画提供拖拽提示 |
+
+> 详细源码请参阅各自的 `.js` / `.css` 文件，函数均已添加注释。
+
+---
 
 ## 跨域注意事项
 
-当主页面和iframe属于不同域时，需要特别注意：
+1. `postMessage(message, targetOrigin)` 中应显式传入 **目标源**，避免泄露数据。
+2. 接收方需通过 `event.origin` 校验来源，拒绝未知域消息。
+3. 若父子页面域名不同，`dataTransfer` 中自定义 MIME 类型可能被浏览器忽略，可改为使用 `postMessage` 传递。
+4. 如需进一步隔离，可结合 `sandbox`、`Content-Security-Policy` 等手段。
 
-- 使用`postMessage`时明确指定目标域
-- 验证接收到的消息来源
-- 考虑CORS配置
-- 可能需要替代`dataTransfer`的数据传输机制
-
-## 使用方法
-
-1. 克隆此仓库
-2. 在浏览器中打开`index.html`
-3. 尝试拖拽左侧列表项到右侧iframe中
+---
 
 ## 浏览器兼容性
 
-本演示在现代浏览器（Chrome、Firefox、Safari、Edge）中测试通过。
+已在以下浏览器最新版中验证：Chrome、Firefox、Safari、Edge。
+
+> IE 系列浏览器已停止维护，且不完整支持 HTML5 拖放标准，不在本示例兼容范围内。
+
+---
+
+## 许可证
+
+[MIT](LICENSE) © 2024 huyansheng3
+
+---
+
+## 参考资料
+
+- [MDN - Using drag and drop](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
+- [MDN - Window.postMessage()](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
+- [HTML Living Standard - Drag and Drop](https://html.spec.whatwg.org/multipage/dnd.html)
